@@ -19,7 +19,7 @@ test_unit:
 test_e2e:
     stage: test
     script:
-        - npm run e2e
+        - npm run test:e2e
 
 build:
     stage: build
