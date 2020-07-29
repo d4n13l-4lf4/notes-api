@@ -14,7 +14,7 @@ describe('Note\'s Controller (e2e)', () => {
   ];
   const notesService: NotesService = {
     findAll: () => notes,
-    findById: (id) => notes.filter(n => n.id === id)
+    findById: (id) => notes.filter(n => n.id.toString() === id)[0]
   };
 
   beforeEach(async () => {
@@ -33,11 +33,8 @@ describe('Note\'s Controller (e2e)', () => {
     return request(app.getHttpServer())
       .get('/notes')
       .expect(200)
-      .expect('Content-Type', 'application/json')
-      .expect(res => res.body = JSON.parse(res.body))
-      .expect((res) => {
-        assert(res.body, JSON.stringify(notes));
-      });
+      .expect('Content-Type', /json/)
+      .expect(notes);
   });
 
   it('/notes/{id} should return a note with the specific id', () => {
@@ -54,8 +51,6 @@ describe('Note\'s Controller (e2e)', () => {
     return request(app.getHttpServer())
       .get(`/notes/10`)
       .expect(200)
-      .expect((res) => {
-        assert(res.body, undefined);
-      });
+      .expect({});
   });
 });
