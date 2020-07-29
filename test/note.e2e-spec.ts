@@ -4,7 +4,7 @@ import * as request from 'supertest';
 import { AppModule } from './../src/app.module';
 import assert from 'assert';
 import { Note } from '../src/models/Note';
-import { NotesService } from '../src/service/NotesService';
+import { NotesService } from '../src/service/notes.service';
 
 describe('Note\'s Controller (e2e)', () => {
   let app: INestApplication;
