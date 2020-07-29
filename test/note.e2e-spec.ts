@@ -2,7 +2,6 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { AppModule } from './../src/app.module';
-import assert from 'assert';
 import { Note } from '../src/models/Note';
 import { NotesService } from '../src/service/notes.service';
 
@@ -14,7 +13,8 @@ describe('Note\'s Controller (e2e)', () => {
   ];
   const notesService: NotesService = {
     findAll: () => notes,
-    findById: (id) => notes.filter(n => n.id.toString() === id)[0]
+    findById: (id) => notes.filter(n => n.id.toString() === id)[0],
+    data: []
   };
 
   beforeEach(async () => {

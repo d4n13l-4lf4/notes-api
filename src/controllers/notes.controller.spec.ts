@@ -11,7 +11,8 @@ describe('AppController', () => {
   ];
   const notesService: NotesService = {
     findAll: () => notes,
-    findById: (id) => notes.filter(n => n.id === id)[0]
+    findById: (id) => notes.filter(n => n.id.toString() === id)[0],
+    data: notes
   };
 
   beforeEach(async () => {
@@ -31,8 +32,8 @@ describe('AppController', () => {
       expect(notesController.getNotes()).toBe(notes);
     });
 
-    it('get /notes/{noteId} should return an array of notes', () => {
-      const noteId = 1;
+    it('get /notes/{noteId} should return the note with the specified id', () => {
+      const noteId = '1';
       expect(notesController.getNote(noteId)).toBe(notes[0]);
     });
   });
