@@ -4,9 +4,9 @@ export class InMemoryRepository<T, ID> implements BasicCrud<T, ID>{
   data = [];
 
   deleteById(id: ID): T {
-    const note = this.findById(id);
+    const entity = this.findById(id);
     this.data = this.data.filter(n => n.id !== id);
-    return note;
+    return entity;
   }
 
   findAll(): Array<T> {

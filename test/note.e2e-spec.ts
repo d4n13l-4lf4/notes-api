@@ -3,7 +3,7 @@ import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { AppModule } from './../src/app.module';
 import { Note } from '../src/models/Note';
-import { NotesService } from '../src/service/notes.service';
+import { NotesInMemoryRepositoryService } from '../src/repository/notes-in-memory-repository.service';
 
 describe('Note\'s Controller (e2e)', () => {
   let app: INestApplication;
@@ -11,25 +11,22 @@ describe('Note\'s Controller (e2e)', () => {
     {id: 1, description: 'Hola'},
     {id: 2, description: 'Bye' }
   ];
-  const notesService: NotesService = {
-    findAll: () => notes,
-    findById: (id) => notes.filter(n => n.id.toString() === id)[0],
-    data: []
-  };
+
+  let notesInMemoryRepository: NotesInMemoryRepositoryService;
 
   beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule]
     })
-      .overrideProvider(NotesService)
-      .useValue(notesService)
       .compile();
 
     app = moduleFixture.createNestApplication();
     await app.init();
+    notesInMemoryRepository = app.get<NotesInMemoryRepositoryService>(NotesInMemoryRepositoryService);
+    notesInMemoryRepository.data = notes;
   });
 
-  it('/notes should return an array of notes', () => {
+  it('GET /notes should return an array of notes', () => {
     return request(app.getHttpServer())
       .get('/notes')
       .expect(200)
@@ -37,7 +34,7 @@ describe('Note\'s Controller (e2e)', () => {
       .expect(notes);
   });
 
-  it('/notes/{id} should return a note with the specific id', () => {
+  it('GET /notes/{id} should return a note with the specific id', () => {
     return request(app.getHttpServer())
       .get('/notes/1')
       .expect(200)
@@ -47,10 +44,29 @@ describe('Note\'s Controller (e2e)', () => {
       })
   });
 
-  it('/notes/{id} should empty if it does not found note', () => {
+  it('GET /notes/{id} should be empty if it does not found note', () => {
     return request(app.getHttpServer())
       .get(`/notes/10`)
       .expect(200)
       .expect({});
+  });
+
+  it('POST /notes should return 201 response code with the note added', () => {
+    const noteToPost: Note = {
+      id: 4,
+      description: 'Nota 1'
+    };
+    return request(app.getHttpServer())
+      .post('/notes')
+      .send({...noteToPost})
+      .expect(201)
+      .expect(noteToPost);
+  });
+
+  it ('DELETE /notes/:id should return 200 response code the note deleted', () => {
+    return request(app.getHttpServer())
+      .delete('/notes/1')
+      .expect(200)
+      .expect(notes[0]);
   });
 });
