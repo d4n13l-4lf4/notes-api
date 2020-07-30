@@ -19,7 +19,7 @@ describe('Notes service unit test', () => {
 
     it('should return a note with the specified id', () => {
       const noteId = '1';
-      expect(notesService.findById(noteId)).toBeTruthy();
+      expect(notesService.findById(noteId)).toMatchObject(expect.objectContaining({id: Number(noteId)}))
     });
   });
 });
