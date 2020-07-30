@@ -1,25 +1,31 @@
 import { Injectable } from '@nestjs/common';
 import { Note } from '../models/Note';
+import { NotesInMemoryRepositoryService } from '../repository/notes-in-memory-repository.service';
 
 @Injectable()
 export class NotesService {
 
-  data: Array<Note>;
 
-  constructor() {
-    this.data = [
-      {id: 1, description: 'Mi nota 1'},
-      {id: 2, description: 'Mi nota 2'}
-    ];
+  constructor(private readonly notesRepository: NotesInMemoryRepositoryService) {
   }
 
   findAll(): Array<Note> {
-    return this.data;
+    return this.notesRepository.findAll();
   }
 
-  findById(id: string): Note {
-    return this.data.filter(n => n.id.toString() === id)[0];
+  findById(id: number): Note {
+    return this.notesRepository.findById(id);
   }
 
 
+  deleteById(id: number): Note {
+    return this.notesRepository.deleteById(id);
+  }
+
+  save(note: Note): Note {
+    if (this.findById(note.id))
+      return;
+
+    return this.notesRepository.save(note);
+  }
 }
