@@ -1,8 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { INestApplication } from '@nestjs/common';
+import { HttpStatus, INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { AppModule } from './../src/app.module';
-import { Note } from '../src/models/Note';
+import { Note } from '../src/models/note';
 import { NotesInMemoryRepositoryService } from '../src/repository/notes-in-memory-repository.service';
 
 describe('Note\'s Controller (e2e)', () => {
@@ -34,7 +34,7 @@ describe('Note\'s Controller (e2e)', () => {
       .expect(notes);
   });
 
-  it('GET /notes/{id} should return a note with the specific id', () => {
+  it('GET /notes/1 should return a note with the specific id', () => {
     return request(app.getHttpServer())
       .get('/notes/1')
       .expect(200)
@@ -44,14 +44,20 @@ describe('Note\'s Controller (e2e)', () => {
       })
   });
 
-  it('GET /notes/{id} should be empty if it does not found note', () => {
+  it('GET /notes/10 should be empty if it does not found note', () => {
     return request(app.getHttpServer())
       .get(`/notes/10`)
       .expect(200)
       .expect({});
   });
 
-  it('POST /notes should return 201 response code with the note added', () => {
+  it ('GET /notes/asdsad should return 400 bad request', () => {
+    return request(app.getHttpServer())
+      .get('/notes/asdasd')
+      .expect(HttpStatus.BAD_REQUEST)
+  });
+
+  it('POST /notes with valid data should return 201 response code with the note added', () => {
     const noteToPost: Note = {
       id: 4,
       description: 'Nota 1'
@@ -63,10 +69,28 @@ describe('Note\'s Controller (e2e)', () => {
       .expect(noteToPost);
   });
 
-  it ('DELETE /notes/:id should return 200 response code the note deleted', () => {
+  it('POST /notes with invalid note data should return 400 bad request', () => {
+    const noteToPost: Note = {
+      id: 4,
+      description: ''
+    };
+    return request(app.getHttpServer())
+      .post('/notes')
+      .send({...noteToPost})
+      .expect(400);
+  });
+
+  it ('DELETE /notes/1 should return 200 response code the note deleted', () => {
     return request(app.getHttpServer())
       .delete('/notes/1')
       .expect(200)
       .expect(notes[0]);
   });
+
+  it ('DELETE /notes/asdasd should return 400 bad request', () => {
+    return request(app.getHttpServer())
+      .delete('/notes/asdasd')
+      .expect(400);
+  });
+
 });

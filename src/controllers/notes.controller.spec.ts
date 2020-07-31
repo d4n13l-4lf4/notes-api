@@ -1,9 +1,10 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { NotesService } from '../service/notes.service';
 import { NotesController } from './notes.controller';
-import { Note } from '../models/Note';
+import { Note } from '../models/note';
 import exp from 'constants';
 import { NotesInMemoryRepositoryService } from '../repository/notes-in-memory-repository.service';
+import { BadRequestException, ParseIntPipe } from '@nestjs/common';
 
 describe('AppController', () => {
   let notesController: NotesController;
@@ -11,6 +12,7 @@ describe('AppController', () => {
     {id: 1, description: 'Hola'},
     {id: 2, description: 'Bye' }
   ];
+  const parseIntPipe = jest.fn();
 
   let notesInMemoryRepository: NotesInMemoryRepositoryService;
 
@@ -19,6 +21,8 @@ describe('AppController', () => {
       controllers: [NotesController],
       providers: [NotesService, NotesInMemoryRepositoryService],
     })
+      .overridePipe(ParseIntPipe)
+      .useValue(parseIntPipe)
       .compile();
 
     notesController = app.get<NotesController>(NotesController);
@@ -65,6 +69,7 @@ describe('AppController', () => {
       notesController.deleteNote(noteToSave.id);
       expect(notesController.getNote(noteToSave.id)).toBe(undefined);
     });
+
   });
 
 });

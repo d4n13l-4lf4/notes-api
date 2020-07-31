@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { NotesService } from './notes.service';
 import { NotesInMemoryRepositoryService } from '../repository/notes-in-memory-repository.service';
-import { Note } from '../models/Note';
+import { Note } from '../models/note';
 
 describe('Notes service unit test', () => {
   let notesService: NotesService;

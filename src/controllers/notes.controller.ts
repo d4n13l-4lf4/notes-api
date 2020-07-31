@@ -1,6 +1,7 @@
-import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, UsePipes } from '@nestjs/common';
 import { NotesService } from '../service/notes.service';
-import { Note } from '../models/Note';
+import { Note } from '../models/note';
+import { NoteValidationPipe } from '../pipes/note-validation.pipe';
 
 
 
@@ -17,18 +18,19 @@ export class NotesController {
   }
 
   @Get(':id')
-  getNote(@Param('id') id): Note {
+  getNote(@Param('id', new ParseIntPipe()) id): Note {
     return this.notesService.findById(Number(id));
   }
 
 
   @Post()
+  @UsePipes(NoteValidationPipe)
   saveNote(@Body() note: Note): Note {
     return this.notesService.save(note);
   }
 
   @Delete(':id')
-  deleteNote(@Param('id') id): Note {
+  deleteNote(@Param('id', new ParseIntPipe()) id): Note {
     return this.notesService.deleteById(Number(id));
   }
 }

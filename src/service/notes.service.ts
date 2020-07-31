@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Note } from '../models/Note';
+import { Note } from '../models/note';
 import { NotesInMemoryRepositoryService } from '../repository/notes-in-memory-repository.service';
 
 @Injectable()
