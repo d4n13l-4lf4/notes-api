@@ -1,18 +1,16 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { HttpStatus, INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
-import { AppModule } from './../src/app.module';
+import { AppModule } from '../src/app.module';
 import { Note } from '../src/models/note';
 import { NotesInMemoryRepositoryService } from '../src/repository/notes-in-memory-repository.service';
 import { OAuthTokenResponse } from './util/OAuthTokenResponse';
 import authenticate from './util/authentication.util';
+import { getRandomNote, getRandomNotes } from './data/test.data';
 
 describe('Note\'s Controller (e2e)', () => {
   let app: INestApplication;
-  const notes: Array<Note> = [
-    {id: 1, description: 'Hola'},
-    {id: 2, description: 'Bye' }
-  ];
+  const notes: Array<Note> = getRandomNotes(2);
 
   let notesInMemoryRepository: NotesInMemoryRepositoryService;
 
@@ -50,14 +48,11 @@ describe('Note\'s Controller (e2e)', () => {
       .expect(notes);
   });
 
-  it('GET /notes/1 should return a note with the specific id', () => {
+  it('GET /notes/' + notes[0].id +' should return a note with the specific id', () => {
     return request(app.getHttpServer())
-      .get('/notes/1')
+      .get('/notes/' + notes[0].id)
       .expect(200)
-      .expect({
-        id: 1,
-        description: 'Hola'
-      })
+      .expect(notes[0])
   });
 
   it('GET /notes/10 should be empty if it does not found note', () => {
@@ -74,31 +69,26 @@ describe('Note\'s Controller (e2e)', () => {
   });
 
   it('POST /notes with valid data should return 201 response code with the note added', () => {
-    const noteToPost: Note = {
-      id: 4,
-      description: 'Nota 1'
-    };
+    const noteToPost: Note = getRandomNote();
     return request(app.getHttpServer())
       .post('/notes')
-      .send({...noteToPost})
+      .send({description: noteToPost.description})
       .expect(201)
-      .expect(noteToPost);
+      .expect(res => {
+        expect(res.body).toEqual(expect.objectContaining({description: noteToPost.description}));
+      });
   });
 
   it('POST /notes with invalid note data should return 400 bad request', () => {
-    const noteToPost: Note = {
-      id: 4,
-      description: ''
-    };
     return request(app.getHttpServer())
       .post('/notes')
-      .send({...noteToPost})
+      .send({})
       .expect(400);
   });
 
-  it ('DELETE /notes/1 should return 200 response code the note deleted', () => {
+  it ('DELETE /notes/' + notes[0].id + ' should return 200 response code the note deleted', () => {
     return request(app.getHttpServer())
-      .delete('/notes/1')
+      .delete('/notes/' + notes[0].id)
       .expect(200)
       .expect(notes[0]);
   });

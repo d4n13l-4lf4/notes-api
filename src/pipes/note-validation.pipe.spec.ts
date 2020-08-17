@@ -18,8 +18,7 @@ describe('Note validation pipe unit tes', () => {
 
   describe('Pipe validations', () => {
     it ('should throw bad request exception with invalid note data', () => {
-      const invalidNote: Note = {
-        id: -1,
+      const invalidNote: Partial<Note> = {
         description: ''
       };
       const argumentMetadata: ArgumentMetadata = {
@@ -29,8 +28,7 @@ describe('Note validation pipe unit tes', () => {
     });
 
     it ('should return the note to add when valid note data', () => {
-      const validNote: Note = {
-        id: 2,
+      const validNote: Partial<Note> = {
         description: 'asd'
       };
       const argumentMetadata: ArgumentMetadata = {
