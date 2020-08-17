@@ -4,6 +4,8 @@ import * as request from 'supertest';
 import { AppModule } from './../src/app.module';
 import { Note } from '../src/models/note';
 import { NotesInMemoryRepositoryService } from '../src/repository/notes-in-memory-repository.service';
+import { OAuthTokenResponse } from './util/OAuthTokenResponse';
+import authenticate from './util/authentication.util';
 
 describe('Note\'s Controller (e2e)', () => {
   let app: INestApplication;
@@ -13,6 +15,19 @@ describe('Note\'s Controller (e2e)', () => {
   ];
 
   let notesInMemoryRepository: NotesInMemoryRepositoryService;
+
+  let authenticationInfo: OAuthTokenResponse;
+  let authenticationHeader: any;
+
+  beforeAll(async () => {
+    try {
+      authenticationInfo = await authenticate();
+      authenticationHeader = {'Authorization': `Bearer ${authenticationInfo.access_token}`};
+    } catch (e) {
+      fail(e);
+    }
+  });
+
 
   beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -29,6 +44,7 @@ describe('Note\'s Controller (e2e)', () => {
   it('GET /notes should return an array of notes', () => {
     return request(app.getHttpServer())
       .get('/notes')
+      .set(authenticationHeader)
       .expect(200)
       .expect('Content-Type', /json/)
       .expect(notes);

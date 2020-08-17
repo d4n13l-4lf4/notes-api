@@ -4,7 +4,7 @@ import { NotesController } from './notes.controller';
 import { Note } from '../models/note';
 import { NotesInMemoryRepositoryService } from '../repository/notes-in-memory-repository.service';
 
-describe('AppController', () => {
+describe('Notes controller unit test', () => {
   let notesController: NotesController;
   const notes: Array<Note> = [
     {id: 1, description: 'Hola'},
@@ -16,8 +16,10 @@ describe('AppController', () => {
   beforeEach(async () => {
     const app: TestingModule = await Test.createTestingModule({
       controllers: [NotesController],
-      providers: [NotesService, NotesInMemoryRepositoryService],
-    })
+      providers: [
+        NotesService,
+        NotesInMemoryRepositoryService,
+      ]})
       .compile();
 
     notesController = app.get<NotesController>(NotesController);

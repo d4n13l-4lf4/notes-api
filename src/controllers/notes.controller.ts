@@ -1,7 +1,8 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, UsePipes } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, UseGuards, UsePipes } from '@nestjs/common';
 import { NotesService } from '../service/notes.service';
 import { Note } from '../models/note';
 import { NoteValidationPipe } from '../pipes/note-validation.pipe';
+import { AuthGuard } from '@nestjs/passport';
 
 
 
@@ -11,7 +12,7 @@ export class NotesController {
   constructor(private readonly notesService: NotesService) {
   }
 
-
+  @UseGuards(AuthGuard('jwt'))
   @Get()
   getNotes(): Array<Note> {
     return this.notesService.findAll();
@@ -30,7 +31,7 @@ export class NotesController {
   }
 
   @Delete(':id')
-  deleteNote(@Param('id', new ParseIntPipe()) id): Note {
-    return this.notesService.deleteById(Number(id));
+  deleteNote(@Param('id', new ParseIntPipe()) id: number): Note {
+    return this.notesService.deleteById(id);
   }
 }
