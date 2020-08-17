@@ -21,10 +21,8 @@ describe('Note\'s Controller (e2e)', () => {
     try {
       authenticationInfo = await authenticate();
       authenticationHeader = {'Authorization': `Bearer ${authenticationInfo.access_token}`};
-      console.log('TOKEN:', authenticationInfo.access_token);
     } catch (e) {
       fail(e);
-      console.log(e);
     }
   });
 

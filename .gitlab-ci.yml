@@ -18,8 +18,6 @@ test_unit:
 
 test_e2e:
   stage: test
-  variables:
-    CI_DEBUG_TRACE: "true"
   script:
     - npm run test:e2e
 
