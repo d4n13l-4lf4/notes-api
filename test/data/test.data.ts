@@ -4,7 +4,7 @@ import { lorem, random } from 'faker';
 function getRandomNote(): Note {
   return {
     id: random.number(),
-    description: lorem.sentences(1),
+    description: lorem.words(2),
   }
 }
 

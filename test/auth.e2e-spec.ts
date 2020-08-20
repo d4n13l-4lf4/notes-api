@@ -9,7 +9,7 @@ describe('Authentication test', () => {
 
   let app: INestApplication;
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule]
     })
@@ -35,6 +35,10 @@ describe('Authentication test', () => {
     } catch(e) {
       fail(e);
     }
+  });
+
+  afterAll(async () => {
+    await app.close();
   });
 
 });

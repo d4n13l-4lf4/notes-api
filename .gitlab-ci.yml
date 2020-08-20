@@ -1,3 +1,11 @@
+services:
+  - name: mongo:4.4.0
+    alias: mongodb
+
+variables:
+  MONGO_INITDB_ROOT_USERNAME: $MONGODB_USER
+  MONGO_INITDB_ROOT_PASSWORD: $MONGODB_PASSWD
+
 image: node:12.6
 
 cache:
@@ -14,7 +22,7 @@ stages:
 test_unit:
   stage: test
   script:
-    - npm run test
+    - npm run test:cov
 
 test_e2e:
   stage: test

@@ -1,4 +1,4 @@
-import { ArgumentMetadata, BadRequestException, PipeTransform } from '@nestjs/common';
+import { ArgumentMetadata, PipeTransform } from '@nestjs/common';
 import { ObjectSchema } from '@hapi/joi';
 
 export class GenericValidationPipe<S> implements PipeTransform {
@@ -9,7 +9,7 @@ export class GenericValidationPipe<S> implements PipeTransform {
     const { error } = this.schema.validate(value);
 
     if (error) {
-      throw new BadRequestException(error);
+      throw error;
     }
     return value;
   }
