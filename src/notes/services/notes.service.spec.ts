@@ -85,7 +85,7 @@ describe('Notes service unit test', () => {
         exec: jest.fn().mockImplementation(() => Promise.resolve({ok: 1, deletedCount: 1}))
       });
       (notesModel.deleteOne as jest.Mock).mockImplementation(mockedDelete);
-      notesService.deleteById(1)
+      notesService.deleteById('1')
         .then((deleted) => {
           expect(mockedDelete).toBeCalledTimes(1);
           expect(deleted).toBeTruthy();
@@ -148,7 +148,7 @@ describe('Notes service unit test', () => {
         exec: jest.fn().mockImplementation(() => Promise.reject(error))
       });
       (notesModel.deleteOne as jest.Mock).mockImplementation(mockedErrorDelete);
-      notesService.deleteById(1)
+      notesService.deleteById('1')
         .catch((e) => {
           expect(mockedErrorDelete).toBeCalledTimes(1);
           expect(e).toMatchObject(e);
