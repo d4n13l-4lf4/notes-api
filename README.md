@@ -4,7 +4,7 @@
 
 ## Description
 
-A simple note's REST API powered by <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo_text.svg" width="320" alt="Nest Logo" /></a>
+<p>A simple note's REST API powered by</p> <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo_text.svg" width="320" alt="Nest Logo" /></a>
 
 ## API Documentation
 You will found the API documentation [here](https://app.swaggerhub.com/apis/d4n13l-4lf4/notes-api/2.0.0)
