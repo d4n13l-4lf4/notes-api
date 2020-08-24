@@ -1,6 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { ArgumentMetadata, BadRequestException } from '@nestjs/common';
-import { AppModule } from '../app.module';
 import { ObjectIdValidationPipe } from './objectId-validation.pipe';
 
 describe('Object ID Validation Pipe Unit Test', () => {
@@ -9,7 +8,7 @@ describe('Object ID Validation Pipe Unit Test', () => {
 
   beforeAll(async () => {
     app = await Test.createTestingModule({
-      imports: [AppModule]
+      providers: [ObjectIdValidationPipe]
     }).compile();
 
     objectIdValidationPipe = app.get<ObjectIdValidationPipe>(ObjectIdValidationPipe);

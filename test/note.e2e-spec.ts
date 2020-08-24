@@ -29,17 +29,17 @@ describe("Notes controller e2e testing", () => {
   let authenticationInfo: OAuthTokenResponse;
   let authenticationHeader: any;
 
-  beforeAll(async () => {
+  beforeAll(async (done) => {
     try {
       const moduleFixture: TestingModule = await Test.createTestingModule({
         imports: [AppModule]
       })
         .compile();
-
       app = moduleFixture.createNestApplication();
-      await app.init();
+      app = await app.init();
       authenticationInfo = await authenticate();
       authenticationHeader = { 'Authorization': `Bearer ${authenticationInfo.access_token}` };
+      done();
     } catch (e) {
       fail(e);
     }
@@ -116,7 +116,8 @@ describe("Notes controller e2e testing", () => {
   });
 
 
-  afterAll(async () => {
+  afterAll(async (done) => {
     await app.close();
+    done();
   })
 });

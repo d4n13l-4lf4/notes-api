@@ -1,10 +1,10 @@
 import { config as dotenvConfig } from 'dotenv';
 import { OAuthTokenResponse } from './OAuthTokenResponse';
-import * as superagent from 'superagent';
+import superagent from 'superagent';
 
 dotenvConfig();
 
-async function authenticate(): Promise<OAuthTokenResponse> {
+function authenticate(): Promise<OAuthTokenResponse> {
   return new Promise(async (resolve, reject) => {
     try {
       const authentication_url = `https://${process.env.AUTH0_DOMAIN}/oauth/token`;
@@ -20,9 +20,9 @@ async function authenticate(): Promise<OAuthTokenResponse> {
       const { body } = await superagent
         .post(authentication_url)
         .send(auth_data);
-      resolve(body);
+      return resolve(body);
     } catch (e) {
-      reject(e);
+      return reject(e);
     }
   });
 }

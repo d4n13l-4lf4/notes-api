@@ -22,12 +22,12 @@ stages:
 test_unit:
   stage: test
   script:
-    - npm run test:cov
+    - npm run test:cov -- --forceExit
 
 test_e2e:
   stage: test
   script:
-    - npm run test:e2e
+    - npm run test:e2e -- --forceExit
 
 build:
   stage: build
