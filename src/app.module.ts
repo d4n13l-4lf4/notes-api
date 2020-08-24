@@ -9,6 +9,8 @@ import { WinstonModule } from 'nest-winston';
 import { UtilModule } from './util/util.module';
 import WinstonConfigService from './service/winston.config.service';
 import loggerConfig from './config/logger.config';
+import { APP_FILTER } from '@nestjs/core';
+import { CustomBaseExceptionFilter } from './filters/custom.base.exception.filter';
 
 @Module({
   imports: [
