@@ -5,6 +5,12 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule } from '@nestjs/config';
 import configOptions from './config/config.options';
 import MongooseConfigService from './service/mongoose.config.service';
+import { WinstonModule } from 'nest-winston';
+import { UtilModule } from './util/util.module';
+import WinstonConfigService from './service/winston.config.service';
+import loggerConfig from './config/logger.config';
+import { APP_FILTER } from '@nestjs/core';
+import { CustomBaseExceptionFilter } from './filters/custom.base.exception.filter';
 
 @Module({
   imports: [
@@ -13,7 +19,12 @@ import MongooseConfigService from './service/mongoose.config.service';
     MongooseModule.forRootAsync({
       useClass: MongooseConfigService
     }),
-    NotesModule
+    WinstonModule.forRootAsync({
+      imports: [ConfigModule.forFeature(loggerConfig)],
+      useClass: WinstonConfigService,
+    }),
+    NotesModule,
+    UtilModule
   ],
   controllers: [],
   providers: [],

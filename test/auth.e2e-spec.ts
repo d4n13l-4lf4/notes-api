@@ -1,7 +1,7 @@
 import { HttpStatus, INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { AppModule } from '../src/app.module';
-import * as request from 'supertest';
+import request from 'supertest';
 import authenticate from './util/authentication.util';
 import { OAuthTokenResponse } from './util/OAuthTokenResponse';
 
@@ -25,13 +25,13 @@ describe('Authentication test', () => {
       .expect(HttpStatus.UNAUTHORIZED)
   });
 
-  it ('GET /notes should return 200 OK when an authorized request is sent', async () => {
+  it('GET /notes should return 200 OK when an authorized request is sent', async () => {
     try {
       const authentication: OAuthTokenResponse = await authenticate();
       return request(app.getHttpServer())
         .get('/notes')
         .set({ Authorization: `Bearer ${authentication.access_token}`})
-        .expect(HttpStatus.OK)
+        .expect(HttpStatus.OK);
     } catch(e) {
       fail(e);
     }

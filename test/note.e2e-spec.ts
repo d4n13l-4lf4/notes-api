@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { HttpStatus, INestApplication } from '@nestjs/common';
-import * as request from 'supertest';
+import request from 'supertest';
 import { AppModule } from '../src/app.module';
 import { OAuthTokenResponse } from './util/OAuthTokenResponse';
 import authenticate from './util/authentication.util';
@@ -22,8 +22,6 @@ const postNote = (httpServer, authenticationHeader) => {
       }));
   })
 };
-
-jest.setTimeout(70000);
 
 describe("Notes controller e2e testing", () => {
   let app: INestApplication;
@@ -87,18 +85,18 @@ describe("Notes controller e2e testing", () => {
       .expect(postedNote as NoteDB);
   });
 
-  it('GET /notes/10 should return 500 status code', () => {
+  it('GET /notes/10 should return 400 status code', () => {
     return request(app.getHttpServer())
       .get(`/notes/10`)
       .set(authenticationHeader)
-      .expect(HttpStatus.INTERNAL_SERVER_ERROR);
+      .expect(HttpStatus.BAD_REQUEST);
   });
 
-  it('GET /notes/asdsad should return 500 status code', () => {
+  it('GET /notes/asdsad should return 400 status code', () => {
     return request(app.getHttpServer())
       .get('/notes/asdasd')
       .set(authenticationHeader)
-      .expect(HttpStatus.INTERNAL_SERVER_ERROR)
+      .expect(HttpStatus.BAD_REQUEST)
   });
 
 
@@ -110,11 +108,11 @@ describe("Notes controller e2e testing", () => {
       .expect(HttpStatus.OK);
   });
 
-  it ('DELETE /notes/asdasd should return 500 status code', () => {
+  it ('DELETE /notes/asdasd should return 400 bad request', () => {
     return request(app.getHttpServer())
       .delete('/notes/asdasd')
       .set(authenticationHeader)
-      .expect(HttpStatus.INTERNAL_SERVER_ERROR);
+      .expect(HttpStatus.BAD_REQUEST);
   });
 
 

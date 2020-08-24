@@ -4,7 +4,7 @@ import {
   Delete,
   Get, HttpCode,
   Param,
-  Post, UseFilters,
+  Post,
   UseGuards,
   UsePipes,
 } from '@nestjs/common';
@@ -12,17 +12,15 @@ import { NotesService } from '../services/notes.service';
 import { NoteValidationPipe } from '../pipes/note-validation.pipe';
 import { AuthGuard } from '@nestjs/passport';
 import { Note } from '../model/note.schema';
-import { ValidationErrorFilter } from '../../filters/validation.error.filter';
-import { MongooseErrorFilter } from '../../filters/mongoose.error.filter';
-import { CustomErrorFilter } from '../../filters/custom.error.filter';
 import CustomError from '../../error/custom.error';
+import { ObjectIdValidationPipe } from '../../pipes/objectId-validation.pipe';
 
 @UseGuards(AuthGuard('jwt'))
-@UseFilters(ValidationErrorFilter, MongooseErrorFilter, CustomErrorFilter)
 @Controller('notes')
 export class NotesController {
 
-  constructor(private readonly notesService: NotesService) {
+  constructor(
+    private readonly notesService: NotesService) {
   }
 
   @Get()
@@ -33,7 +31,7 @@ export class NotesController {
 
   @Get(':id')
   @HttpCode(200)
-  getNote(@Param('id') id: string): Promise<Note> {
+  getNote(@Param('id', ObjectIdValidationPipe) id: string): Promise<Note> {
     return this.notesService.findById(id);
   }
 
@@ -47,7 +45,7 @@ export class NotesController {
 
   @Delete(':id')
   @HttpCode(200)
-  async deleteNote(@Param('id') id: string) {
+  async deleteNote(@Param('id', ObjectIdValidationPipe) id: string) {
     const deleted = await this.notesService.deleteById(id);
     if (deleted)
       return;

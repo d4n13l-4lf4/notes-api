@@ -7,7 +7,9 @@ const mockedExecution: ArgumentsHost = {
     getResponse: jest.fn().mockReturnValue({
       status: jest.fn().mockReturnThis(),
       json: mockedJsonResponse,
-    })
+    }),
+    getRequest: jest.fn().mockReturnValue({
+    }),
   }),
   switchToWs: jest.fn(),
   switchToRpc: jest.fn(),
