@@ -8,7 +8,7 @@ import { ConfigType } from '@nestjs/config';
 @Injectable()
 export default class WinstonConfigService implements WinstonModuleOptionsFactory {
 
-  private logzioTransport: LogzioWinstonTransport;
+  private readonly logzioTransport: LogzioWinstonTransport;
 
   constructor(@Inject(loggerConfig.KEY)
               private readonly loggerConfiguration: ConfigType<typeof loggerConfig>) {
@@ -17,6 +17,7 @@ export default class WinstonConfigService implements WinstonModuleOptionsFactory
       token: loggerConfiguration.token,
       host: loggerConfiguration.listener_host,
       compress: true,
+      name: 'My app'
     });
   }
 
@@ -26,10 +27,11 @@ export default class WinstonConfigService implements WinstonModuleOptionsFactory
         new winston.transports.Console({
           level: this.loggerConfiguration.level,
           format: winston.format.combine(
-            winston.format.prettyPrint(),
             winston.format.timestamp(),
-            winston.format.colorize({ all: true }),
-          )
+            winston.format.json(),
+            winston.format.prettyPrint(),
+            winston.format.colorize({ all:true, message: true, colors: {'info': 'blue', 'error': 'red', 'warn': 'yellow'} }),
+          ),
         }),
         this.logzioTransport
       ],

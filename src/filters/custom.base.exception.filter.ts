@@ -5,7 +5,13 @@ import ErrorResponseHandlerService from '../util/service/error-response-handler.
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
 const getFromRequest = (request: Request) => {
-  return `Method: ${request.method} Path: ${request.path} Params: ${JSON.stringify(request.params)} Body: ${JSON.stringify(request.body)}`;
+  const context = {
+    method: request.method,
+    path: request.path,
+    params: request.params,
+    body: request.body,
+  };
+  return JSON.stringify(context);
 }
 
 @Catch()
